@@ -1,19 +1,19 @@
 function ConvertHandler() {
   
   this.getNum = function(input) {
-    let result = input.split(/[a-zA-Z]+|^[A-Za-z]+/g)
-    
+    let result = input.split(/[a-z]+|[^a-z]+/gi)
+    console.log(input)
     return Number(result[0]);
   };
   
   this.getUnit = function(input) {
-    let result=input.split(/[a-zA-Z]+|^[A-Za-z]+/g)
-    
+    let result=input.split(/[a-z]+|[^a-z]+/gi)
+    console.log(result)
     return result[1];
   };
   
   this.getReturnUnit = function(input) {
-    let result = input.split(/[a-zA-Z]+|[0-9]+/g)[1].toLowercase()
+    let result = input.split(/[a-z]+|[^a-z]+/gi)[1].toLowercase()
 		if(result == 'gal'){
 			return 'L'
 		}else if(result == 'l'){
@@ -28,7 +28,7 @@ function ConvertHandler() {
 			return 'gal'
 		}
   this.spellOutUnit = function(result) {
-	 //let result = input.split(/[a-zA-Z]+|^[a-zA-Z]+/g)[1].toLowercase()
+	  //let result = input.split(/[a-z]+|[^a-z]+/gi)[1].toLowercase()
 		if(result == 'gal'){
 			return 'gallons'
 		}else if(result == 'l'){
@@ -48,8 +48,8 @@ function ConvertHandler() {
     const galToL = 3.78541;
     const lbsToKg = 0.453592;
     const miToKm = 1.60934;
-		let number = Number(input.split(/[a-zA-Z]+^[A-Za-z]+/) [0].toLowercase())
-		let result = input.split(/[a-zA-Z]+|[0-9]+/g)[1].toLowercase()
+		let number = Number(input.split(/[a-z]+|[^a-z]+/gi)[0].toLowercase())
+		let result = input.split(/[a-z]+|[^a-z]+/gi)[1].toLowercase()
 		if(result == 'gal'){
 			return number*galToL 
 		}else if(result == 'l'){  
@@ -66,8 +66,8 @@ function ConvertHandler() {
   };
   
   this.getString = function(input) {
-		let number = Number(input.split(/[a-zA-Z]+^[A-Za-z]+/) [0].toLowercase())
-    let result = input.split(/[a-zA-Z]+|[0-9]+/g)[1].toLowercase()
+		let number = Number(input.split(/[a-z]+|[^a-z]+/gi)[0].toLowercase())
+    let result = input.split(/[a-z]+|[^a-z]+/gi)[1].toLowercase()
     return this.getNum(input)+' '+this. spellOutUnit(this.getUnit(input))+' converts to '+this.convert(input)+' '+this.spellOutUnit(this.getReturnUnit(input))
 
 
