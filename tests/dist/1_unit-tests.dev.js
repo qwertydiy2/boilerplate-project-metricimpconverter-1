@@ -1,9 +1,12 @@
-const chai = require("chai");
-let assert = chai.assert;
-const ConvertHandler = require("../controllers/convertHandler.js");
+"use strict";
 
-let convertHandler = new ConvertHandler();
+var chai = require("chai");
 
+var assert = chai.assert;
+
+var ConvertHandler = require("../controllers/convertHandler.js");
+
+var convertHandler = new ConvertHandler();
 suite("Unit Tests", function () {
   suite("getNum", function () {
     test("accept whole number", function () {
@@ -20,7 +23,9 @@ suite("Unit Tests", function () {
     });
     test("error when converting double fractional number", function () {
       //assert.instanceOf(convertHandler.getNum('1/2.5/4'),Error)
-      assert.throws(() => convertHandler.getNum("1/4/6gal"), Error);
+      assert["throws"](function () {
+        return convertHandler.getNum("1/4/6gal");
+      }, Error);
     });
     test("accept no number", function () {
       assert.equal(convertHandler.getNum("gal"), 1);
@@ -36,20 +41,12 @@ suite("Unit Tests", function () {
       assert.equal(convertHandler.getUnit("5kg"), "kg");
     });
     test("throw an error when converting invalid units", function () {
-      assert.throws(
-        () => {
-          convertHandler.getUnit("4invalid");
-        },
-        Error,
-        /Invalid conversion unit/
-      );
-      assert.throws(
-        () => {
-          convertHandler.getUnit("invalid");
-        },
-        Error,
-        /No conversion unit/
-      );
+      assert["throws"](function () {
+        convertHandler.getUnit("4invalid");
+      }, Error, /Invalid conversion unit/);
+      assert["throws"](function () {
+        convertHandler.getUnit("invalid");
+      }, Error, /No conversion unit/);
     });
   });
   suite("getReturnUnit", function () {
@@ -62,20 +59,12 @@ suite("Unit Tests", function () {
       assert.equal(convertHandler.getReturnUnit("7kg"), "lbs");
     });
     test("throw an error when returning invalid units", function () {
-      assert.throws(
-        () => {
-          convertHandler.getReturnUnit("4invalid");
-        },
-        Error,
-        /Invalid conversion unit/
-      );
-      assert.throws(
-        () => {
-          convertHandler.getReturnUnit("invalid");
-        },
-        Error,
-        /No conversion unit/
-      );
+      assert["throws"](function () {
+        convertHandler.getReturnUnit("4invalid");
+      }, Error, /Invalid conversion unit/);
+      assert["throws"](function () {
+        convertHandler.getReturnUnit("invalid");
+      }, Error, /No conversion unit/);
     });
   });
   suite("convert", function () {
