@@ -11,12 +11,15 @@ var server = require("../server");
 var _require = require("../server"),
     get = _require.get;
 
+var ConvertHandler = require("../controllers/convertHandler.js");
+
+var convertHandler = new ConvertHandler();
 chai.use(chaiHttp);
 suite("Functional Tests", function () {
   suite("Valid Inputs", function () {
     test("convert a valid input", function (done) {
       chai.request(server).get("/api/convert?input=10L").end(function (err, res) {
-        assert.isAbove(res.status, 299);
+        assert.equal(res.status, 200);
         assert.equal(res.text, '{"initNum":10,"initUnit":"L","returnNum":2.6417217685798895,"returnUnit":"gal","string":"10 litres converts to 2.6417217685798895 gallons"}');
       });
       chai.request(server).get("/api/convert?input=10gal").end(function (err, res) {
@@ -34,6 +37,7 @@ suite("Functional Tests", function () {
           assert.isAbove(res.status, 299);
           assert.equal(res.text, '{"initNum":10,"initUnit":"km","returnNum":6.213727366498068,"returnUnit":"mi","string":"10 kilometers converts to 6.213727366498068 miles"}');
         });
+        p;
         chai.request(server).get("/api/convert?input=10mi").end(function (err, res) {
           assert.isAbove(res.status, 299);
           assert.equal(res.text, '{"initNum":10,"initUnit":"mi","returnNum":16.0934,"returnUnit":"Km","string":"10 miles converts to 16.0934 kilometers"}');
@@ -44,31 +48,37 @@ suite("Functional Tests", function () {
     test("convert an invalid input", function (done) {
       chai.request(server).get("/api/convert?input=invalidgal").end(function (err, res) {
         assert.isAbove(res.status, 299);
-        assert.include(res.text, "Not Found");
-      });
-      done();
-    });
-    test("convert an invalid number", function (done) {
-      chai.request(server).get("/api/convert?input=3/9/2kg").end(function (err, res) {
-        assert.isAbove(res.status, 299);
-        assert.include(res.text, "Not Found");
+        assert(assert.include(res.text, "Not Found") || assert["throws"](function () {
+          convertHandler.getString('invalidgal');
+        }, Error));
         done();
       });
-      test("convert an invalid number and unit", function (done) {
-        chai.request(server).get("/api/convert?input=3/9/2kgvthnh").end(function (err, res) {
+      test("convert an invalid number", function (done) {
+        chai.request(server).get("/api/convert?input=3/9/2kg").end(function (err, res) {
           assert.isAbove(res.status, 299);
-          assert.include(res.text, "Not Found");
+          assert(assert.include(res.text, "Not Found") || assert["throws"](function () {
+            convertHandler.getString('3/9/2kg');
+          }, Error));
           done();
+        });
+        test("convert an invalid number and unit", function (done) {
+          chai.request(server).get("/api/convert?input=3/9/2kgvthnh").end(function (err, res) {
+            assert.isAbove(res.status, 299);
+            assert(assert.include(res.text, "Not Found") || assert["throws"](function () {
+              convertHandler.getString('3/9/2kgvthnh');
+            }, Error));
+            done();
+          });
         });
       });
     });
-  });
-  suite("No Number Tests", function (done) {
-    test("convert with no number", function (done) {
-      chai.request(server).get("/api/convert/mi").end(function (err, res) {
-        assert.equal(res.status, 200);
-        assert.include(res.text, '{"initNum":1,"initUnit":"mi","returnNum":1.60934,"returnUnit":"Km","string":"1 miles converts to 1.60934 kilometers"}');
-        done();
+    suite("No Number Tests", function (done) {
+      test("convert with no number", function (done) {
+        chai.request(server).get("/api/convert/mi").end(function (err, res) {
+          assert.equal(res.status, 200);
+          assert.equal(res.text, '{"initNum":1,"initUnit":"mi","returnNum":1.60934,"returnUnit":"Km","string":"1 miles converts to 1.60934 kilometers"}');
+          done();
+        });
       });
     });
   });
