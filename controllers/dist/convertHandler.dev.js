@@ -8,7 +8,8 @@ function ConvertHandler() {
     if (isNaN(result[0]) == false) {
       return Number(result[0]);
     } else {
-      fraction = result[0].split("/");
+      numberToSplit = result[0];
+      fraction = numberToSplit.split("/");
 
       if (fraction.length < 3) {
         if (fraction.length == 1) {
@@ -25,20 +26,23 @@ function ConvertHandler() {
   this.getUnit = function (input) {
     var result = input.match(/[a-zA-Z]+|[^A-Za-z]+/g);
     console.log("🚀 ~ file: convertHandler.js ~ line 12 ~ ConvertHandler ~ result", result);
-
-    if (result.length == 1 && result[0].match(/[a-zA-Z]+/) == []) {
-      return "No conversion unit";
-    } else {
+    {
       var unit = result[result.length - 1];
 
       if (unit.toLowerCase() == "gal" || unit.toLowerCase() == "l" || unit.toLowerCase() == "kg" || unit.toLowerCase() == "lbs" || unit.toLowerCase() == "km" || unit.toLowerCase() == "mi") {
-        if (unit.toLowerCase() != 'l') {
+        if (unit.toLowerCase() != "l") {
           return unit.toLowerCase();
         } else {
-          return 'L';
+          return "L";
         }
       } else {
-        return "Invalid conversion unit";
+        var toTestForUnit = result[0];
+
+        if (result.length == 1 && toTestForUnit.match(/[a-zA-Z]+/) == null) {
+          return "No conversion unit";
+        } else {
+          return "Invalid conversion unit";
+        }
       }
     }
   };
@@ -46,10 +50,18 @@ function ConvertHandler() {
   this.getReturnUnit = function (input) {
     var result = input.match(/[a-zA-Z]+|[^A-Za-z]+/g);
 
-    if (result.length == 1 && result[0].match(/[a-zA-Z]+/) == []) {
+    if (result.length == 1 && result[0].match(/[a-zA-Z]+/) == null) {
       return "No conversion unit";
     } else {
-      result = result[result.length - 1].toLowerCase();
+      result = result[result.length - 1];
+      var toTestForUnit = result[0];
+
+      if (result.length == 1 && toTestForUnit.match(/[a-zA-Z]+/) == null) {
+        return "No conversion unit";
+      } else {
+        result = result.toLowerCase();
+      }
+
       console.log("🚀 ~ file: convertHandler.js ~ line 17 ~ ConvertHandler ~ result", result);
 
       if (result == "gal") {
@@ -65,7 +77,11 @@ function ConvertHandler() {
       } else if (result == "km") {
         return "mi";
       } else {
-        return "Invalid conversion unit";
+        // let toTestForUnit = result[0];
+        // if (result.length == 1 && toTestForUnit.match(/[a-zA-Z]+/) == null) {
+        //   return "No conversion unit";
+        // } else {
+        return "Invalid conversion unit"; // }
       }
     }
   }; //find check for errors in chai assert.

@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-var expect = require('chai').expect;
+var expect = require("chai").expect;
 
-var ConvertHandler = require('../controllers/convertHandler.js');
+var ConvertHandler = require("../controllers/convertHandler.js");
 
 module.exports = function (app) {
   var convertHandler = new ConvertHandler();
@@ -11,29 +11,37 @@ module.exports = function (app) {
     console.log("🚀 ~ file: api.js ~ line 13 ~ convertHandler.convert", convertHandler.convert);
     /*try {
     var x = convertHandler.getUnit(input)
-    	var y = convertHandler.getNum(input)
+    var y = convertHandler.getNum(input)
     } catch(error) {
-    	if(error){
-    	try {
-    		var x = convertHandler.getUnit(input)
-    	} catch(error) {
-    		if(error)
-    		try {
-    			var y = convertHandler.getNum(input)
-    			res.text('invalid unit')
-    		} catch(error) {
-    			res.text('invalid number and unit')
-    		}
-    	} try {
-    		var y = convertHandler.getNum(input)
-    	} catch {
-    			res.text('invalid number')
-    	}
+    if(error){
+    try {
+    var x = convertHandler.getUnit(input)
+    } catch(error) {
+    if(error)
+    try {
+    var y = convertHandler.getNum(input)
+    res.type("text").send('invalid unit')
+    } catch(error) {
+    res.type("text").send('invalid number and unit')
+    }
+    } try {
+    var y = convertHandler.getNum(input)
+    } catch {
+    res.type("text").send('invalid number')
+    }
     }
     }*/
 
-    if (convertHandler.getNum() != "Invalid conversion unit") {
-      if (convertHandler.getUnit() != "No conversion unit") {
+    if (convertHandler.getNum(input) == "Invalid conversion") {
+      if (convertHandler.getUnit(input) == "No conversion unit") {
+        res.type("text").send("Invalid number and unit");
+      } else {
+        res.type("text").send("Invalid number");
+      }
+    } else {
+      if (convertHandler.getUnit(input) == "No conversion unit" || convertHandler.getUnit(input) == "Invalid conversion unit") {
+        res.type("text").send("Invalid unit");
+      } else {
         res.json({
           initNum: convertHandler.getNum(input),
           initUnit: convertHandler.getUnit(input),
@@ -41,14 +49,6 @@ module.exports = function (app) {
           returnUnit: convertHandler.getReturnUnit(input),
           string: convertHandler.getString(input)
         });
-      } else {
-        res.text("invalid number");
-      }
-    } else {
-      if (convertHandler.getUnit() != "No conversion unit") {
-        res.text("invalid unit");
-      } else {
-        res.text("invalid number and unit");
       }
     }
   });
