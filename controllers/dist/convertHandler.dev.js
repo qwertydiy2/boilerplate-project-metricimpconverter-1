@@ -17,7 +17,7 @@ function ConvertHandler() {
           return Number(eval(result[0]));
         }
       } else {
-        throw new Error("Invalid conversion");
+        return "Invalid conversion";
       }
     }
   };
@@ -26,22 +26,30 @@ function ConvertHandler() {
     var result = input.match(/[a-zA-Z]+|[^A-Za-z]+/g);
     console.log("🚀 ~ file: convertHandler.js ~ line 12 ~ ConvertHandler ~ result", result);
 
-    if (result.length == 1) {
-      throw new Error("No conversion unit");
-    } else if (result[1].toLowerCase() == "gal" || result[1].toLowerCase() == "l" || result[1].toLowerCase() == "kg" || result[1].toLowerCase() == "lbs" || result[1].toLowerCase() == "km" || result[1].toLowerCase() == "mi") {
-      return result[1];
+    if (result.length == 1 && result[0].match(/[a-zA-Z]+/) == []) {
+      return "No conversion unit";
     } else {
-      throw new Error("Invalid conversion unit");
+      var unit = result[result.length - 1];
+
+      if (unit.toLowerCase() == "gal" || unit.toLowerCase() == "l" || unit.toLowerCase() == "kg" || unit.toLowerCase() == "lbs" || unit.toLowerCase() == "km" || unit.toLowerCase() == "mi") {
+        if (unit.toLowerCase() != 'l') {
+          return unit.toLowerCase();
+        } else {
+          return 'L';
+        }
+      } else {
+        return "Invalid conversion unit";
+      }
     }
   };
 
   this.getReturnUnit = function (input) {
     var result = input.match(/[a-zA-Z]+|[^A-Za-z]+/g);
 
-    if (result.length == 1) {
-      throw new Error("No conversion unit");
+    if (result.length == 1 && result[0].match(/[a-zA-Z]+/) == []) {
+      return "No conversion unit";
     } else {
-      result = result[1].toLowerCase();
+      result = result[result.length - 1].toLowerCase();
       console.log("🚀 ~ file: convertHandler.js ~ line 17 ~ ConvertHandler ~ result", result);
 
       if (result == "gal") {
@@ -49,15 +57,15 @@ function ConvertHandler() {
       } else if (result == "l") {
         return "gal";
       } else if (result == "lbs") {
-        return "Kg";
+        return "kg";
       } else if (result == "kg") {
         return "lbs";
       } else if (result == "mi") {
-        return "Km";
+        return "km";
       } else if (result == "km") {
         return "mi";
       } else {
-        throw new Error("Invalid conversion unit");
+        return "Invalid conversion unit";
       }
     }
   }; //find check for errors in chai assert.
@@ -86,29 +94,38 @@ function ConvertHandler() {
     var galToL = 3.78541;
     var lbsToKg = 0.453592;
     var miToKm = 1.60934;
-    var number = Number(input.match(/[a-zA-Z]+|[^A-Za-z]+/g)[0].toLowerCase());
-    console.log("🚀 ~ file: convertHandler.js ~ line 53 ~ ConvertHandler ~ number", number);
-    var result = input.match(/[a-zA-Z]+|[^A-Za-z]+/g)[1].toLowerCase();
+    var number =
+    /*Number(input.match(/[a-zA-Z]+|[^A-Za-z]+/g)[0].toLowerCase());
+    console.log(
+    "🚀 ~ file: convertHandler.js ~ line 53 ~ ConvertHandler ~ number",
+    number
+    );*/
+    this.getNum(input);
+    var result = input.match(/[a-zA-Z]+|[^A-Za-z]+/g);
+    result = result[result.length - 1];
+    result = result.toLowerCase();
     console.log("🚀 ~ file: convertHandler.js ~ line 55 ~ ConvertHandler ~ result", result);
 
     if (result == "gal") {
-      return number * galToL;
+      return Math.round(number * galToL * 100000) / 100000;
     } else if (result == "l") {
-      return number / galToL;
+      return Math.round(number / galToL * 100000) / 100000;
     } else if (result == "lbs") {
-      return lbsToKg * number;
+      return Math.round(lbsToKg * number * 100000) / 100000;
     } else if (result == "kg") {
-      return number / lbsToKg;
+      return Math.round(number / lbsToKg * 100000) / 100000;
     } else if (result == "mi") {
-      return miToKm * number;
+      return Math.round(miToKm * number * 100000) / 100000;
     } else if (result == "km") {
-      return number / miToKm;
+      return Math.round(number / miToKm * 100000) / 100000;
     }
   };
 
   this.getString = function (input) {
     var number = Number(input.split(/[a-zA-Z]+[^A-Za-z]+/)[0].toLowerCase());
-    var result = input.match(/[a-zA-Z]+|[^A-Za-z]+/g)[1].toLowerCase();
+    var result = input.match(/[a-zA-Z]+|[^A-Za-z]+/g);
+    result = result[result.length - 1];
+    result = result.toLowerCase();
     return this.getNum(input) + " " + this.spellOutUnit(this.getUnit(input)) + " converts to " + this.convert(input) + " " + this.spellOutUnit(this.getReturnUnit(input));
   };
 }

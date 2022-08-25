@@ -77,7 +77,7 @@ suite("Functional Tests", function () {
         .get("/api/convert?input=invalidgal")
         .end(function (err, res) {
           assert.isAbove(res.status, 299);
-          assert(assert.include(res.text, "Not Found") ||
+          assert(assert.equal(res.text, "Invalid number") ||
           assert.throws(function() {convertHandler.getString('invalidgal');}, Error))
       done();
     });
@@ -87,7 +87,7 @@ suite("Functional Tests", function () {
         .get("/api/convert?input=3/9/2kg")
         .end(function (err, res) {
           assert.isAbove(res.status, 299);
-          assert(assert.include(res.text, "Not Found") || assert.throws(function() {convertHandler.getString('3/9/2kg');}, Error));
+          assert(assert.equal(res.text, "Invalid unit") || assert.throws(function() {convertHandler.getString('3/9/2kg');}, Error));
           done();
         });
       test("convert an invalid number and unit", function (done) {
@@ -96,7 +96,7 @@ suite("Functional Tests", function () {
           .get("/api/convert?input=3/9/2kgvthnh")
           .end(function (err, res) {
             assert.isAbove(res.status, 299);
-            assert(assert.include(res.text, "Not Found") || assert.throws(() => {convertHandler.getString('3/9/2kgvthnh');}, Error));
+            assert(assert.equal(res.text, "Invalid number and unit") || assert.throws(() => {convertHandler.getString('3/9/2kgvthnh');}, Error));
             done();
           });
       });

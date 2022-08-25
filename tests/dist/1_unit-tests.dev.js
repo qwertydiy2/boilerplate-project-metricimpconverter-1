@@ -23,9 +23,7 @@ suite("Unit Tests", function () {
     });
     test("error when converting double fractional number", function () {
       //assert.instanceOf(convertHandler.getNum('1/2.5/4'),Error)
-      assert["throws"](function () {
-        return convertHandler.getNum("1/4/6gal");
-      }, Error);
+      assert.equal(convertHandler.getNum("1/4/6gal"), "Invalid conversion unit");
     });
     test("accept no number", function () {
       assert.equal(convertHandler.getNum("gal"), 1);
@@ -41,12 +39,12 @@ suite("Unit Tests", function () {
       assert.equal(convertHandler.getUnit("5kg"), "kg");
     });
     test("throw an error when converting invalid units", function () {
-      assert["throws"](function () {
+      assert.equal(function () {
         convertHandler.getUnit("4invalid");
-      }, Error, /Invalid conversion unit/);
-      assert["throws"](function () {
+      }, "Invalid conversion unit");
+      assert.equal(function () {
         convertHandler.getUnit("invalid");
-      }, Error, /No conversion unit/);
+      }, "No conversion unit");
     });
   });
   suite("getReturnUnit", function () {
@@ -59,12 +57,12 @@ suite("Unit Tests", function () {
       assert.equal(convertHandler.getReturnUnit("7kg"), "lbs");
     });
     test("throw an error when returning invalid units", function () {
-      assert["throws"](function () {
+      assert.equal(function () {
         convertHandler.getReturnUnit("4invalid");
-      }, Error, /Invalid conversion unit/);
-      assert["throws"](function () {
+      }, "Invalid conversion unit");
+      assert.equal(function () {
         convertHandler.getReturnUnit("invalid");
-      }, Error, /No conversion unit/);
+      }, "No conversion unit");
     });
   });
   suite("convert", function () {
