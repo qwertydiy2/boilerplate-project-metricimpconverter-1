@@ -22,29 +22,29 @@ module.exports = function (app) {
 			if(error)
 			try {
 				var y = convertHandler.getNum(input)
-				res.type("text").send('invalid unit')
+				res.send('invalid unit')
 			} catch(error) {
-				res.type("text").send('invalid number and unit')
+				res.send('invalid number and unit')
 			}
 		} try {
 			var y = convertHandler.getNum(input)
 		} catch {
-				res.type("text").send('invalid number')
+				res.send('invalid number')
 		}
 	}
 	}*/
     if (convertHandler.getNum(input) == "Invalid conversion") {
-      if (convertHandler.getUnit(input) == "No conversion unit") {
-        res.type("text").send("Invalid number and unit");
+      if (convertHandler.getUnit(input) == "No conversion unit" || convertHandler.getUnit(input) == "Invalid conversion unit") {
+        res.send("Invalid number and unit");
       } else {
-        res.type("text").send("Invalid number");
+        res.send("Invalid number");
       }
     } else {
       if (
         convertHandler.getUnit(input) == "No conversion unit" ||
         convertHandler.getUnit(input) == "Invalid conversion unit"
       ) {
-        res.type("text").send("Invalid unit");
+        res.send("Invalid unit");
       } else {
         res.json({
           initNum: convertHandler.getNum(input),
