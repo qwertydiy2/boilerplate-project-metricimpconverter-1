@@ -1,17 +1,17 @@
-"use strict";
+'use strict'
 
-const expect = require("chai").expect;
-const ConvertHandler = require("../controllers/convertHandler.js");
+const expect = require('chai').expect
+const ConvertHandler = require('../controllers/convertHandler.js')
 
 module.exports = function (app) {
-  let convertHandler = new ConvertHandler();
-  app.get("/api/convert", function (req, res) {
-    let input = req.query.input;
+  const convertHandler = new ConvertHandler()
+  app.get('/api/convert', function (req, res) {
+    const input = req.query.input
     console.log(
-      "🚀 ~ file: api.js ~ line 13 ~ convertHandler.convert",
+      '🚀 ~ file: api.js ~ line 13 ~ convertHandler.convert',
       convertHandler.convert
-    );
-    /*try {
+    )
+    /* try {
 	var x = convertHandler.getUnit(input)
 		var y = convertHandler.getNum(input)
 	} catch(error) {
@@ -32,28 +32,31 @@ module.exports = function (app) {
 				res.send('invalid number')
 		}
 	}
-	}*/
-    if (convertHandler.getNum(input) == "Invalid conversion") {
-      if (convertHandler.getUnit(input) == "No conversion unit" || convertHandler.getUnit(input) == "Invalid conversion unit") {
-        res.send("Invalid number and unit");
+	} */
+    if (convertHandler.getNum(input) == 'Invalid conversion') {
+      if (
+        convertHandler.getUnit(input) == 'No conversion unit' ||
+        convertHandler.getUnit(input) == 'Invalid conversion unit'
+      ) {
+        res.send('Invalid number and unit')
       } else {
-        res.send("Invalid number");
+        res.send('Invalid number')
       }
     } else {
       if (
-        convertHandler.getUnit(input) == "No conversion unit" ||
-        convertHandler.getUnit(input) == "Invalid conversion unit"
+        convertHandler.getUnit(input) == 'No conversion unit' ||
+        convertHandler.getUnit(input) == 'Invalid conversion unit'
       ) {
-        res.send("Invalid unit");
+        res.send('Invalid unit')
       } else {
         res.json({
           initNum: convertHandler.getNum(input),
           initUnit: convertHandler.getUnit(input),
           returnNum: convertHandler.convert(input),
           returnUnit: convertHandler.getReturnUnit(input),
-          string: convertHandler.getString(input),
-        });
+          string: convertHandler.getString(input)
+        })
       }
     }
-  });
-};
+  })
+}
